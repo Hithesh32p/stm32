@@ -1,19 +1,26 @@
 #include <stdint.h>
 
-#define RCC_APB2ENR   (*(volatile uint32_t*)0x40021018)
-#define GPIOC_CRH     (*(volatile uint32_t*)0x40011004)
-#define GPIOC_ODR     (*(volatile uint32_t*)0x4001100C)
+// RCC
+#define RCC_IOPENR   (*(volatile uint32_t*)0x40021034)
+
+// GPIOA
+#define GPIOA_MODER  (*(volatile uint32_t*)0x50000000)
+#define GPIOA_ODR    (*(volatile uint32_t*)0x50000014)
+
+void delay(volatile uint32_t t) {
+    while (t--);
+}
 
 int main(void) {
-    // Enable GPIOC clock
-    RCC_APB2ENR |= (1 << 4);
+    // Enable GPIOA clock
+    RCC_IOPENR |= (1 << 0);
 
-    // Set PC13 as output
-    GPIOC_CRH &= ~(0xF << 20);
-    GPIOC_CRH |=  (0x1 << 20);
+    // Set PA5 as output (01)
+    GPIOA_MODER &= ~(3 << (5 * 2));
+    GPIOA_MODER |=  (1 << (5 * 2));
 
     while (1) {
-        GPIOC_ODR ^= (1 << 13);
-        for (volatile int i = 0; i < 500000; i++);
+        GPIOA_ODR ^= (1 << 5);
+        delay(500000);
     }
 }
