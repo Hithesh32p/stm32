@@ -1,5 +1,5 @@
 CC = arm-none-eabi-gcc
-CFLAGS = -mcpu=cortex-m3 -mthumb -nostdlib -Wall
+CFLAGS = -mcpu=cortex-m0plus -mthumb -nostdlib -Wall
 LDFLAGS = -T stm32.ld
 
 all: firmware.elf
